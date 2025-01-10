@@ -10,6 +10,16 @@ pygame.init()
 # game variables #
 #----------------#
 
+#----------#
+# sound fx #
+#----------#
+
+deal_sfx = pygame.mixer.Sound("sounds/mix-card.mp3")
+hit_sfx = pygame.mixer.Sound("sounds/hit-card.mp3")
+win_sfx = pygame.mixer.Sound("sounds/game-win.mp3")
+loss_sfx = pygame.mixer.Sound("sounds/game-over.mp3")
+stop_sfx = pygame.mixer.Sound("sounds/stop.mp3")
+
 # setup cards (1 suit)
 cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 # 1 deck = 4 suits
@@ -183,9 +193,11 @@ def check_endgame(hand_act, deal_score, play_score, result, totals, add):
         if add:
             if result == 1 or result == 3:
                 totals[1] += 1
+                loss_sfx.play()
 
             elif result == 2:
                 totals[0] += 1
+                win_sfx.play()
 
             else:
                 totals[2] += 1
@@ -256,15 +268,18 @@ while run:
                     reveal_dealer = False
                     outcome = 0
                     add_score = True
+                    deal_sfx.play()
             else:
                 # if player can hit, allow them to draw a card
                 if buttons[0].collidepoint(event.pos) and player_score < 21 and hand_active:
                     my_hand, game_deck = deal_cards(my_hand, game_deck)
+                    hit_sfx.play()
                 # allow player to end turn (stand)
                 elif buttons[1].collidepoint(event.pos) and not reveal_dealer:
                     reveal_dealer = True
                     hand_active = False
-                    time.sleep(3)
+                    stop_sfx.play()
+                    time.sleep(1)
                 elif len(buttons) == 3:
                     if buttons[2].collidepoint(event.pos):
                         active = True
@@ -279,6 +294,8 @@ while run:
                         add_score = True
                         dealer_score = 0
                         player_score = 0
+                        deal_sfx.play()
+
 
     # if player busts, automatically end turn - treat like a stand
     if hand_active and player_score >= 21:
