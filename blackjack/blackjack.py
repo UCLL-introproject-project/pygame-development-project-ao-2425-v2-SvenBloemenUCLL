@@ -121,13 +121,14 @@ def calculate_score(hand):
 
 # draw game conditions and buttons
 def draw_game(act, record, result):
+
     button_list = []
     # initially on startup (not active), the only option is a new hand
     if not act:
         # draw 'deal' button on the screen
         # parameters => target (screen), color (white), [list with X, Y, Width, Height], edge width, border-radius
-        deal = pygame.draw.rect(screen, 'white', [150, 20, 300, 100], 0, 5)
-        pygame.draw.rect(screen, 'green', [150, 20, 300, 100], 3, 5)
+        deal = pygame.draw.rect(screen, 'honeydew2', [150, 20, 300, 100], 0, 5)
+        pygame.draw.rect(screen, 'chartreuse4', [150, 20, 300, 100], 6, 5)
 
         # add text to button
         # parameters => text, anti-alias, color
@@ -138,21 +139,21 @@ def draw_game(act, record, result):
     # once game started, shot hit and stand buttons and win/loss records
     else:
         # draw 'HIT' button on the screen
-        hit = pygame.draw.rect(screen, 'white', [0, 700, 300, 100], 0, 5)
-        pygame.draw.rect(screen, 'green', [0, 700, 300, 100], 3, 5)
+        hit = pygame.draw.rect(screen, 'white', [40, 720, 240, 80], 0, 5)
+        pygame.draw.rect(screen, 'chartreuse4', [40, 720, 240, 80], 3, 5)
 
         # add text to button
         hit_text = font.render('HIT ME', True, 'black')
-        screen.blit(hit_text, (55, 735))
+        screen.blit(hit_text, (85, 740))
 
         button_list.append(hit)
 
         # draw 'STAND' button on the screen
-        stand = pygame.draw.rect(screen, 'white', [300, 700, 300, 100], 0, 5)
-        pygame.draw.rect(screen, 'green', [300, 700, 300, 100], 3, 5)
+        stand = pygame.draw.rect(screen, 'white', [320, 720, 240, 80], 0, 5)
+        pygame.draw.rect(screen, 'chartreuse4', [320, 720, 240, 80], 3, 5)
 
         stand_text = font.render('STAND', True, 'black')
-        screen.blit(stand_text, (355, 735))
+        screen.blit(stand_text, (365, 740))
 
         button_list.append(stand)
 
@@ -216,7 +217,10 @@ run = True
 while run:
     # run game at our framerate and fill screen with bg-color
     timer.tick(fps)
-    screen.fill('black')
+    # screen.fill('black')
+    # insert background image
+    bg_image = pygame.image.load('img/cardgame-background.png')
+    screen.blit(bg_image, (0, 0))
 
     # initial deal to player and dealer
     if initial_deal:
@@ -279,7 +283,7 @@ while run:
                     reveal_dealer = True
                     hand_active = False
                     stop_sfx.play()
-                    time.sleep(1)
+                    time.sleep(3)
                 elif len(buttons) == 3:
                     if buttons[2].collidepoint(event.pos):
                         active = True
