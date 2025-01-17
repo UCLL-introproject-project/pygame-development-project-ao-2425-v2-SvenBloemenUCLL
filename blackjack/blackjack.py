@@ -10,21 +10,22 @@ pygame.init()
 # game variables #
 #----------------#
 
-#--------#
-# buttons #
-#--------#
-
-btn_font = pygame.font.Font('fonts/NotoSans-bold.ttf', 44)
+# colors
 clr_white = (246, 248, 255)
 clr_green = (35, 133, 59)
 clr_red = (204, 41, 54)
 clr_blue = (52, 138, 167)
-# clr_blue = (66, 245, 155)
+
+# buttons
+
+btn_font = pygame.font.Font('fonts/NotoSans-bold.ttf', 44)
 border_radius = 50
 
-#----------#
-# sound fx #
-#----------#
+# card background
+
+card_background = pygame.image.load('img/card-template.png')
+
+# sound fx 
 
 deal_sfx = pygame.mixer.Sound("sounds/mix-card.mp3")
 hit_sfx = pygame.mixer.Sound("sounds/hit-card.mp3")
@@ -91,20 +92,22 @@ def draw_scores(player, dealer):
 def draw_cards(player, dealer, reveal):
     for i in range(len(player)):
         pygame.draw.rect(screen, clr_white, [70 + (70 * i), 460 + (5 * i), 130, 220], 0, 5)
-        screen.blit(regular_font.render(player[i], True, 'black'), (82 + 70 * i, 463 + 5 * i))
-        screen.blit(regular_font.render(player[i], True, 'black'), (167 + 70 * i, 613 + 5 * i))
-        pygame.draw.rect(screen, clr_red, [70 + (70 * i), 460 + (5 * i), 130, 220], 8, 5)
+        # overlay card rect with an image
+        screen.blit(card_background, [70 + (70 * i), 460 + (5 * i), 130, 220])
+        screen.blit(regular_font.render(player[i], True, clr_red), (82 + 70 * i, 463 + 5 * i))
+        screen.blit(regular_font.render(player[i], True, clr_red), (167 + 70 * i, 613 + 5 * i))
 
     # if player hasn't finished turn, dealer will hide one card
     for i in range(len(dealer)):
         pygame.draw.rect(screen, clr_white, [70 + (70 * i), 120 + (5 * i), 130, 220], 0, 5)
+        # overlay card rect with an image
+        screen.blit(card_background, [70 + (70 * i), 120 + (5 * i), 130, 220])
         if i != 0 or reveal:
-            screen.blit(regular_font.render(dealer[i], True, 'black'), (82 + 70 * i, 123 + 5 * i))
-            screen.blit(regular_font.render(dealer[i], True, 'black'), (167 + 70 * i, 273 + 5 * i))
+            screen.blit(regular_font.render(dealer[i], True, clr_blue), (82 + 70 * i, 123 + 5 * i))
+            screen.blit(regular_font.render(dealer[i], True, clr_blue), (167 + 70 * i, 273 + 5 * i))
         else:
-            screen.blit(regular_font.render('???', True, 'black'), (82 + 70 * i, 123 + 5 * i))
-            screen.blit(regular_font.render('???', True, 'black'), (167 + 70 * i, 273 + 5 * i))
-        pygame.draw.rect(screen, clr_blue, [70 + (70 * i), 120 + (5 * i), 130, 220], 8, 5)
+            screen.blit(regular_font.render('???', True, clr_blue), (82 + 70 * i, 123 + 5 * i))
+            screen.blit(regular_font.render('???', True, clr_blue), (167 + 70 * i, 273 + 5 * i))
 
 
 # pass in player or dealer hand and get best score possible
