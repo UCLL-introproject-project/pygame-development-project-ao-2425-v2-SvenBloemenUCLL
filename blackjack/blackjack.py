@@ -32,6 +32,12 @@ soundtrack = pygame.mixer.music.load("sounds/epic-soundtrack.mp3")
 pygame.mixer.music.set_volume(0.15)
 pygame.mixer.music.play(loops=-1)
 
+play_soundtrack = True
+
+# mute_btn
+
+mute_btn = pygame.image.load('img/mute-btn.png')
+
 # sound fx 
 
 deal_sfx = pygame.mixer.Sound("sounds/mix-card.mp3")
@@ -243,6 +249,10 @@ while run:
     bg_image = pygame.image.load('img/cardgame-background.png')
     screen.blit(bg_image, (0, 0))
 
+    # draw mute button in game
+    mute = pygame.draw.circle(screen, clr_white, (535, 70), 35)
+    screen.blit(mute_btn, (500, 35))
+
     # initial deal to player and dealer
     if initial_deal:
         # in the initial deal we want two cards (for me and dealer), hence the for loop
@@ -279,6 +289,17 @@ while run:
             run = False
 
         if event.type == pygame.MOUSEBUTTONUP:
+
+            # mute / unmute soundtrack
+
+            if mute.collidepoint(event.pos):
+                if play_soundtrack:
+                    pygame.mixer.music.pause()
+                    play_soundtrack = False
+                else: 
+                    pygame.mixer.music.unpause()
+                    play_soundtrack = True
+
             if not active:
                 # when game not active, button[0] is 'DEAL' button (buttons list)
                 if buttons[0].collidepoint(event.pos):
