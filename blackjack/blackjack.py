@@ -26,6 +26,12 @@ border_radius = 50
 
 card_background = pygame.image.load('img/card-template.png')
 
+# soundtrack 
+
+soundtrack = pygame.mixer.music.load("sounds/epic-soundtrack.mp3")
+pygame.mixer.music.set_volume(0.15)
+pygame.mixer.music.play(loops=-1)
+
 # sound fx 
 
 deal_sfx = pygame.mixer.Sound("sounds/mix-card.mp3")
@@ -298,7 +304,7 @@ while run:
                     reveal_dealer = True
                     hand_active = False
                     stop_sfx.play()
-                    time.sleep(3)
+                    time.sleep(1)
                 elif len(buttons) == 3:
                     if buttons[2].collidepoint(event.pos):
                         active = True
