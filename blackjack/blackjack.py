@@ -11,10 +11,12 @@ pygame.init()
 #----------------#
 
 #--------#
-# colors #
+# buttons #
 #--------#
 
+btn_font = pygame.font.Font('fonts/NotoSans-bold.ttf', 44)
 my_green = (66, 245, 155)
+border_radius = 50
 
 #----------#
 # sound fx #
@@ -133,32 +135,32 @@ def draw_game(act, record, result):
     if not act:
         # draw 'deal' button on the screen
         # parameters => target (screen), color (white), [list with X, Y, Width, Height], edge width, border-radius
-        deal = pygame.draw.rect(screen, 'honeydew2', [150, 20, 300, 100], 0, 5)
-        pygame.draw.rect(screen, 'chartreuse4', [150, 20, 300, 100], 6, 5)
+        deal = pygame.draw.rect(screen, 'honeydew2', [150, 20, 300, 100], 0, border_radius)
+        pygame.draw.rect(screen, my_green, [150, 20, 300, 100], 6, border_radius)
 
         # add text to button
         # parameters => text, anti-alias, color
-        deal_text = regular_font.render('DEAL HAND', True, 'black')
+        deal_text = btn_font.render('DEAL HAND', True, 'black')
         screen.blit(deal_text, (165, 50))
         button_list.append(deal)
 
     # once game started, shot hit and stand buttons and win/loss records
     else:
         # draw 'HIT' button on the screen
-        hit = pygame.draw.rect(screen, 'white', [40, 720, 240, 80], 0, 5)
-        pygame.draw.rect(screen, 'chartreuse4', [40, 720, 240, 80], 3, 5)
+        hit = pygame.draw.rect(screen, 'white', [40, 720, 240, 80], 0, border_radius)
+        pygame.draw.rect(screen, my_green, [40, 720, 240, 80], 5, border_radius)
 
         # add text to button
-        hit_text = regular_font.render('HIT ME', True, 'black')
+        hit_text = btn_font.render('HIT ME', True, 'black')
         screen.blit(hit_text, (85, 740))
 
         button_list.append(hit)
 
         # draw 'STAND' button on the screen
-        stand = pygame.draw.rect(screen, 'white', [320, 720, 240, 80], 0, 5)
-        pygame.draw.rect(screen, 'chartreuse4', [320, 720, 240, 80], 3, 5)
+        stand = pygame.draw.rect(screen, 'white', [320, 720, 240, 80], 0, border_radius)
+        pygame.draw.rect(screen, my_green, [320, 720, 240, 80], 5, border_radius)
 
-        stand_text = regular_font.render('STAND', True, 'black')
+        stand_text = btn_font.render('STAND', True, 'black')
         screen.blit(stand_text, (365, 740))
 
         button_list.append(stand)
@@ -169,10 +171,10 @@ def draw_game(act, record, result):
     # if there is an outcome for the hand that was played, display a restart button and tell user what happened
     if result != 0:
         screen.blit(smaller_font.render(results[result], True, 'white'), (15, 25))
-        deal = pygame.draw.rect(screen, 'white', [150, 220, 300, 100], 0, 5)
-        pygame.draw.rect(screen, my_green, [150, 220, 300, 100], 3, 5)
-        pygame.draw.rect(screen, 'black', [153, 223, 294, 94], 3, 5)
-        deal_text = regular_font.render('NEW HAND', True, 'black')
+        deal = pygame.draw.rect(screen, 'white', [150, 220, 300, 100], 0, border_radius)
+        pygame.draw.rect(screen, my_green, [150, 220, 300, 100], 3, border_radius)
+        pygame.draw.rect(screen, 'black', [153, 223, 294, 94], 3, border_radius)
+        deal_text = btn_font.render('NEW HAND', True, 'black')
         screen.blit(deal_text, (165, 250))
 
         button_list.append(deal)
