@@ -14,6 +14,7 @@ pygame.init()
 clr_white = (246, 248, 255)
 clr_green = (35, 133, 59)
 clr_red = (204, 41, 54)
+clr_gold = (247, 179, 43)
 clr_blue = (52, 138, 167)
 
 # buttons
@@ -94,8 +95,8 @@ def draw_cards(player, dealer, reveal):
         pygame.draw.rect(screen, clr_white, [70 + (70 * i), 460 + (5 * i), 130, 220], 0, 5)
         # overlay card rect with an image
         screen.blit(card_background, [70 + (70 * i), 460 + (5 * i), 130, 220])
-        screen.blit(regular_font.render(player[i], True, clr_red), (82 + 70 * i, 463 + 5 * i))
-        screen.blit(regular_font.render(player[i], True, clr_red), (167 + 70 * i, 613 + 5 * i))
+        screen.blit(regular_font.render(player[i], True, clr_red), (88 + 70 * i, 463 + 5 * i))
+        screen.blit(regular_font.render(player[i], True, clr_red), (150 + 70 * i, 613 + 5 * i))
 
     # if player hasn't finished turn, dealer will hide one card
     for i in range(len(dealer)):
@@ -103,11 +104,11 @@ def draw_cards(player, dealer, reveal):
         # overlay card rect with an image
         screen.blit(card_background, [70 + (70 * i), 120 + (5 * i), 130, 220])
         if i != 0 or reveal:
-            screen.blit(regular_font.render(dealer[i], True, clr_blue), (82 + 70 * i, 123 + 5 * i))
-            screen.blit(regular_font.render(dealer[i], True, clr_blue), (167 + 70 * i, 273 + 5 * i))
+            screen.blit(regular_font.render(dealer[i], True, clr_blue), (88 + 70 * i, 123 + 5 * i))
+            screen.blit(regular_font.render(dealer[i], True, clr_blue), (150 + 70 * i, 273 + 5 * i))
         else:
-            screen.blit(regular_font.render('???', True, clr_blue), (82 + 70 * i, 123 + 5 * i))
-            screen.blit(regular_font.render('???', True, clr_blue), (167 + 70 * i, 273 + 5 * i))
+            screen.blit(regular_font.render('???', True, clr_blue), (88 + 70 * i, 123 + 5 * i))
+            screen.blit(regular_font.render('???', True, clr_blue), (150 + 70 * i, 273 + 5 * i))
 
 
 # pass in player or dealer hand and get best score possible
@@ -178,11 +179,10 @@ def draw_game(act, record, result):
     # if there is an outcome for the hand that was played, display a restart button and tell user what happened
     if result != 0:
         screen.blit(smaller_font.render(results[result], True, 'white'), (15, 25))
-        deal = pygame.draw.rect(screen, 'white', [150, 220, 300, 100], 0, border_radius)
-        pygame.draw.rect(screen, clr_blue, [150, 220, 300, 100], 3, border_radius)
-        pygame.draw.rect(screen, 'black', [153, 223, 294, 94], 3, border_radius)
-        deal_text = btn_font.render('NEW HAND', True, 'black')
-        screen.blit(deal_text, (175, 240))
+        deal = pygame.draw.rect(screen, clr_blue, [150, 220, 300, 100], 0, border_radius)
+        pygame.draw.rect(screen, clr_gold, [150, 220, 300, 100], 5, border_radius)
+        deal_text = btn_font.render('NEW HAND', True, clr_white)
+        screen.blit(deal_text, (180, 238))
 
         button_list.append(deal)
 
