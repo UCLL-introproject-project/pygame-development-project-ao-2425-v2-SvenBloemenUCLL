@@ -10,7 +10,7 @@ pygame.init()
 # game variables #
 #----------------#
 
-# colors
+# work with variables to have consistent colors throughout the game
 clr_white = (246, 248, 255)
 clr_green = (35, 133, 59)
 clr_red = (204, 41, 54)
@@ -18,7 +18,7 @@ clr_gold = (247, 179, 43)
 clr_blue = (52, 138, 167)
 
 # buttons
-
+# adding a sans-serif font for the buttons
 btn_font = pygame.font.Font('fonts/NotoSans-bold.ttf', 44)
 border_radius = 50
 
@@ -26,20 +26,25 @@ border_radius = 50
 
 card_background = pygame.image.load('img/card-template.png')
 
-# soundtrack 
-
+# load the soundtrack 
+# use pygame.mixer.music.load to have a different channel than the sound effects
 soundtrack = pygame.mixer.music.load("sounds/epic-soundtrack.mp3")
+
+# to prevent the soundtrack from playing way too loud (distorted), I had to change the volume
 pygame.mixer.music.set_volume(0.15)
+
+# play the soundtrack in a continuous loop
 pygame.mixer.music.play(loops=-1)
 
+# set play_soundtrack to true in order to make the mute / unmute button work
 play_soundtrack = True
 
-# mute_btn
+# load img for mute_btn
 
 mute_btn = pygame.image.load('img/mute-btn.png')
 
-# sound fx 
-
+# sound fx
+# use pygame.mixer.Sound to load the effects on another channel than the backing track
 deal_sfx = pygame.mixer.Sound("sounds/mix-card.mp3")
 hit_sfx = pygame.mixer.Sound("sounds/hit-card.mp3")
 win_sfx = pygame.mixer.Sound("sounds/game-win.mp3")
@@ -57,11 +62,12 @@ decks = 4
 WIDTH = 600
 HEIGHT = 900
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
-pygame.display.set_caption('Pygame Blackjack!')
+pygame.display.set_caption('Blackjack!')
 
 fps = 60
 timer = pygame.time.Clock()
 
+# load some custom fonts
 regular_font = pygame.font.Font('fonts/Atma-Medium.ttf', 44)
 smaller_font = pygame.font.Font('fonts/Atma-regular.ttf', 36)
 
@@ -105,7 +111,7 @@ def draw_scores(player, dealer):
 def draw_cards(player, dealer, reveal):
     for i in range(len(player)):
         pygame.draw.rect(screen, clr_white, [70 + (70 * i), 460 + (5 * i), 130, 220], 0, 5)
-        # overlay card rect with an image
+        # overlay card rect with an image, use color variables to improve consistency
         screen.blit(card_background, [70 + (70 * i), 460 + (5 * i), 130, 220])
         screen.blit(regular_font.render(player[i], True, clr_red), (88 + 70 * i, 463 + 5 * i))
         screen.blit(regular_font.render(player[i], True, clr_red), (150 + 70 * i, 613 + 5 * i))
@@ -113,7 +119,7 @@ def draw_cards(player, dealer, reveal):
     # if player hasn't finished turn, dealer will hide one card
     for i in range(len(dealer)):
         pygame.draw.rect(screen, clr_white, [70 + (70 * i), 120 + (5 * i), 130, 220], 0, 5)
-        # overlay card rect with an image
+        # overlay card rect with an image, use color variables to improve consistency
         screen.blit(card_background, [70 + (70 * i), 120 + (5 * i), 130, 220])
         if i != 0 or reveal:
             screen.blit(regular_font.render(dealer[i], True, clr_blue), (88 + 70 * i, 123 + 5 * i))
@@ -150,9 +156,26 @@ def calculate_score(hand):
 # draw game conditions and buttons
 def draw_game(act, record, result):
 
+    # show with how many decks we're playing on the screen
+    n_decks_text = smaller_font.render(f'{decks} decks', True, clr_gold)
+    screen.blit(n_decks_text, (22, 25))
+
     button_list = []
     # initially on startup (not active), the only option is a new hand
     if not act:
+
+        # draw add deck button in game
+        add_deck = pygame.draw.circle(screen, clr_gold, (50, 95), 15)
+        add_deck_text = smaller_font.render('+', True, clr_green)
+        screen.blit(add_deck_text, (44, 68))
+        button_list.append(add_deck)
+
+        # draw remove deck button in game
+        remove_deck = pygame.draw.circle(screen, clr_gold, (88, 95), 15)
+        remove_deck_text = smaller_font.render('-', True, clr_red)
+        screen.blit(remove_deck_text, (83, 65))
+        button_list.append(remove_deck)
+
         # draw 'deal' button on the screen
         # parameters => target (screen), color (white), [list with X, Y, Width, Height], edge width, border-radius
         deal = pygame.draw.rect(screen, clr_blue, [150, 20, 300, 100], 0, border_radius)
@@ -190,7 +213,7 @@ def draw_game(act, record, result):
 
     # if there is an outcome for the hand that was played, display a restart button and tell user what happened
     if result != 0:
-        screen.blit(smaller_font.render(results[result], True, 'white'), (15, 25))
+        screen.blit(smaller_font.render(results[result], True, 'white'), (175, 0))
         deal = pygame.draw.rect(screen, clr_blue, [150, 220, 300, 100], 0, border_radius)
         pygame.draw.rect(screen, clr_gold, [150, 220, 300, 100], 5, border_radius)
         deal_text = btn_font.render('NEW HAND', True, clr_white)
@@ -219,10 +242,12 @@ def check_endgame(hand_act, deal_score, play_score, result, totals, add):
             result = 4
 
         if add:
+            # loss
             if result == 1 or result == 3:
                 totals[1] += 1
                 loss_sfx.play()
 
+            # win
             elif result == 2:
                 totals[0] += 1
                 win_sfx.play()
@@ -244,7 +269,6 @@ run = True
 while run:
     # run game at our framerate and fill screen with bg-color
     timer.tick(fps)
-    # screen.fill('black')
     # insert background image
     bg_image = pygame.image.load('img/cardgame-background.png')
     screen.blit(bg_image, (0, 0))
@@ -301,8 +325,23 @@ while run:
                     play_soundtrack = True
 
             if not active:
-                # when game not active, button[0] is 'DEAL' button (buttons list)
+                # add decks by clicking on add button
+
+                # if add_deck button clicked, increase decks by 1
                 if buttons[0].collidepoint(event.pos):
+                    #according to google you can play blackjack with 1 - 8 decks of cards, 
+                    # so you can't increase to more than 8 decks of cards
+                    if decks < 8:
+                        decks += 1
+
+                # if decrease_deck button clicked, decrease decks by 1
+                if buttons[1].collidepoint(event.pos):
+                    #it would be impossible to play the game with less than 1 deck of cards ;-)
+                    if decks > 1:
+                        decks -= 1
+
+                # when game not active, button[0] is 'DEAL' button (buttons list)
+                if buttons[2].collidepoint(event.pos):
                     active = True
                     # initial deal is the only time in the game two cards are given
                     initial_deal = True
@@ -325,6 +364,7 @@ while run:
                     reveal_dealer = True
                     hand_active = False
                     stop_sfx.play()
+                    # prevent stop_fx.play() and win / loss sound effect from playing simultaneously 
                     time.sleep(1)
                 elif len(buttons) == 3:
                     if buttons[2].collidepoint(event.pos):
